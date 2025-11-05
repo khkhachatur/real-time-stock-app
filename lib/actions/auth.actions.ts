@@ -4,11 +4,15 @@ import {auth} from "@/lib/better-auth/auth";
 import {inngest} from "@/lib/inngest/client";
 import {headers} from "next/headers";
 
+console.log("✅ auth.actions.ts is being imported");
+
 export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry }: SignUpFormData) => {
     try {
+        console.log("ENV MONGODB_URI 2:", process.env.MONGODB_URI);
         const response = await auth.api.signUpEmail({ body: { email, password, name: fullName } })
-
+        
         if(response) {
+            console.log("ENV MONGODB_URI 3:", process.env.MONGODB_URI);
             await inngest.send({
                 name: 'app/user.created',
                 data: { email, name: fullName, country, investmentGoals, riskTolerance, preferredIndustry }
