@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stock App",
+  title: "Growie",
   description: "track real-time stock prices, get personalized alerts and explore company insights.",
 };
 
