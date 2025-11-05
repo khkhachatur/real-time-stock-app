@@ -38,6 +38,7 @@ const onSubmit = async(data: SignInFormData)=>{
   return (
     <div className="flex flex-col gap-5">
             <h1 className="form-title">Welcome back</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
             <InputField
                     name="email"
@@ -46,7 +47,7 @@ const onSubmit = async(data: SignInFormData)=>{
                     register={register}
                     error={errors.email}
                     validation={{ required: 'Email name is required', pattern: /^\w+@\w+\.\w+$/, message: 'Email address is required' }}
-                />
+                    />
 
                 <InputField
                     name="password"
@@ -63,6 +64,8 @@ const onSubmit = async(data: SignInFormData)=>{
                 </Button>
 
                 <FooterLink text="Don't have an account yet?" linkText="Create an Account" href="/sign-up" />
+
+                    </form>
       
     </div>
   )
