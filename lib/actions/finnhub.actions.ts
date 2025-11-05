@@ -35,7 +35,7 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
 
     const maxArticles = 6;
 
-
+    // If we have symbols, try to fetch company news per symbol and round-robin select
     if (cleanSymbols.length > 0) {
       const perSymbolArticles: Record<string, RawNewsArticle[]> = {};
 
@@ -53,7 +53,7 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
       );
 
       const collected: MarketNewsArticle[] = [];
-
+      // Round-robin up to 6 picks
       for (let round = 0; round < maxArticles; round++) {
         for (let i = 0; i < cleanSymbols.length; i++) {
           const sym = cleanSymbols[i];
@@ -68,6 +68,14 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
       }
 
       if (collected.length > 0) {
+        // Sort by datetime desc
+        collected.sort((a, b) => (b.datetime || 0) - (a.datetime || 0));
+        return collected.slice(0, maxArticles);
+      }
+      // If none collected, fall through to general news
+    }
+
+    // General market news fallback or when no symbols provided
         collected.sort((a, b) => (b.datetime || 0) - (a.datetime || 0));
         return collected.slice(0, maxArticles);
       }
@@ -84,7 +92,7 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
       if (seen.has(key)) continue;
       seen.add(key);
       unique.push(art);
-      if (unique.length >= 20) break; 
+      if (unique.length >= 20) break; // cap early before final slicing
     }
 
     const formatted = unique.slice(0, maxArticles).map((a, idx) => formatArticle(a, false, undefined, idx));
@@ -99,6 +107,7 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
   try {
     const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
     if (!token) {
+      // If no token, log and return empty to avoid throwing per requirements
       console.error('Error in stock search:', new Error('FINNHUB API key is not configured'));
       return [];
     }
@@ -136,7 +145,7 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
             displaySymbol: symbol,
             type: 'Common Stock',
           };
- 
+          
           (r as any).__exchange = exchange; // internal only
           return r;
         })
