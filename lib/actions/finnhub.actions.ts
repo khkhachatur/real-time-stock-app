@@ -1,3 +1,4 @@
+
 'use server';
 
 import { getDateRange, validateArticle, formatArticle } from '@/lib/utils';
@@ -76,11 +77,6 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
     }
 
     // General market news fallback or when no symbols provided
-        collected.sort((a, b) => (b.datetime || 0) - (a.datetime || 0));
-        return collected.slice(0, maxArticles);
-      }
-    }
-
     const generalUrl = `${FINNHUB_BASE_URL}/news?category=general&token=${token}`;
     const general = await fetchJSON<RawNewsArticle[]>(generalUrl, 300);
 
@@ -145,7 +141,9 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
             displaySymbol: symbol,
             type: 'Common Stock',
           };
-          
+          // We don't include exchange in FinnhubSearchResult type, so carry via mapping later using profile
+          // To keep pipeline simple, attach exchange via closure map stage
+          // We'll reconstruct exchange when mapping to final type
           (r as any).__exchange = exchange; // internal only
           return r;
         })
