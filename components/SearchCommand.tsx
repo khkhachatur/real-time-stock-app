@@ -99,7 +99,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                           {stock.symbol} | {stock.exchange } | {stock.type}
                         </div>
                       </div>
-                    {/*<Star />*/}
+                    {/* <Star /> */}
                     </Link>
                   </li>
               ))}
