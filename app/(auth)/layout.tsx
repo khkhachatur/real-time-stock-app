@@ -33,13 +33,13 @@ const layout = async ({children}: {children: React.ReactNode}) => {
                 </div>
                     <div className="flex items-center gap-0.5">
                         {[1,2,3,4,5].map((star)=>(
-                            <Image src='assets/icons/star.svg'  alt='star' key={star} width={20} height={20} className="h-5 w-5"/>
+                            <Image src='assets/icons/star.svg'  alt='star' key={star} width={20} height={20} className="h-5 w-5 hover:fill-yellow-500 transition-400"/>
                         ))}
                     </div>
                 </div>
             </div>
             <div className="flex-1 relative">
-                <Image src='/assets/images/dashboard2.png' alt='dashboard' width={1440} height={1115} className="auth-dashboard-preview absolute top-0"/>
+                <Image src='/assets/images/dashboard.png' alt='dashboard' width={1440} height={1115} className="auth-dashboard-preview absolute top-0"/>
             </div>
         </section>
     </main>
