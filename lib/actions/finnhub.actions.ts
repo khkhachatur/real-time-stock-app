@@ -76,6 +76,11 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
     }
 
     // General market news fallback or when no symbols provided
+        collected.sort((a, b) => (b.datetime || 0) - (a.datetime || 0));
+        return collected.slice(0, maxArticles);
+      }
+    }
+
     const generalUrl = `${FINNHUB_BASE_URL}/news?category=general&token=${token}`;
     const general = await fetchJSON<RawNewsArticle[]>(generalUrl, 300);
 

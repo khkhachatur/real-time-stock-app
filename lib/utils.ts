@@ -36,6 +36,38 @@ export function formatMarketCapValue(marketCapUsd: number): string {
   return `$${marketCapUsd.toFixed(2)}`; // Below one million, show full USD amount
 }
 
+}
+
+export const formatTimeAgo = (timestamp: number) => {
+  const now = Date.now();
+  const diffInMs = now - timestamp * 1000; // Convert to milliseconds
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+
+  if (diffInHours > 24) {
+    const days = Math.floor(diffInHours / 24);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  } else if (diffInHours >= 1) {
+    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+  }
+};
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Formatted string like "$3.10T", "$900.00B", "$25.00M" or "$999,999.99"
+export function formatMarketCapValue(marketCapUsd: number): string {
+  if (!Number.isFinite(marketCapUsd) || marketCapUsd <= 0) return 'N/A';
+
+  if (marketCapUsd >= 1e12) return `$${(marketCapUsd / 1e12).toFixed(2)}T`; // Trillions
+  if (marketCapUsd >= 1e9) return `$${(marketCapUsd / 1e9).toFixed(2)}B`; // Billions
+  if (marketCapUsd >= 1e6) return `$${(marketCapUsd / 1e6).toFixed(2)}M`; // Millions
+  return `$${marketCapUsd.toFixed(2)}`; // Below one million, show full USD amount
+}
+
 export const getDateRange = (days: number) => {
   const toDate = new Date();
   const fromDate = new Date();
@@ -137,4 +169,5 @@ export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US'
   month: 'long',
   day: 'numeric',
   timeZone: 'UTC',
+});
 });
